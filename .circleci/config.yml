@@ -3,7 +3,7 @@ version: 2.1
 executors:
   python-executor:
     docker:
-      - image: circleci/python:3.9
+      - image: circleci/python:3.10  # Оновлюємо Python до 3.10
     working_directory: ~/repo
 
 jobs:
@@ -11,28 +11,43 @@ jobs:
     executor: python-executor
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "requirements.txt" }}
       - run:
           name: Install dependencies
           command: |
             python -m venv .venv
             . .venv/bin/activate
+            pip install --upgrade pip
             pip install -r requirements.txt
             pip install pre-commit flake8 black isort pytest
+      - save_cache:
+          paths:
+            - .venv
+          key: dependencies-{{ checksum "requirements.txt" }}
 
   lint_code:
     executor: python-executor
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "requirements.txt" }}
       - run:
           name: Lint with pre-commit
           command: |
             . .venv/bin/activate
+            pre-commit install
             pre-commit run --all-files
 
   run_tests:
     executor: python-executor
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - dependencies-{{ checksum "requirements.txt" }}
       - run:
           name: Run tests
           command: |
