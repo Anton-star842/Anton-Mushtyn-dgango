@@ -1,0 +1,13 @@
+Django==4.2.19
+djangorestframework==3.15.2
+djangorestframework_simplejwt==5.4.0
+celery==5.4.0
+django-celery-beat==2.7.0
+django-cors-headers==4.7.0
+django-extensions==3.2.3
+django-filter==24.3
+djangorestframework==3.15.2
+psycopg2-binary==2.9.10
+gunicorn==23.0.0
+redis==5.2.1
+python-dotenv==1.0.1
